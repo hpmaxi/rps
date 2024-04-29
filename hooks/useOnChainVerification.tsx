@@ -1,22 +1,31 @@
 import { ProofData } from '@noir-lang/types';
-import { useAccount, useConnect, useContractRead } from 'wagmi';
-import { contractCallConfig } from '../utils/wagmi.jsx';
+import { useAccount, useConnect, useReadContract, useReconnect } from 'wagmi';
+import { config, contractCallConfig } from '../utils/wagmi.jsx';
 import { bytesToHex } from 'viem';
 import { useEffect, useState } from 'react';
 import { Id, toast } from 'react-toastify';
+import { hardhat, scrollSepolia } from 'viem/chains';
 
 export function useOnChainVerification(proofData?: ProofData) {
   const { connect, connectors } = useConnect();
   const { isConnected } = useAccount();
   const [args, setArgs] = useState<[string, string[]] | undefined>();
 
-  const { data, error } = useContractRead({
+  const { reconnect } = useReconnect();
+
+  const { data, error } = useReadContract({
     ...contractCallConfig,
     args,
-    enabled: !!args,
+    query: {
+      enabled: !!args,
+    },
   });
 
   const [onChainToast, setOnChainToast] = useState<Id>(0);
+
+  useEffect(() => {
+    connect({ connector: config.connectors[0], chainId: hardhat.id });
+  }, []);
 
   useEffect(() => {
     if (!proofData || !isConnected) {
@@ -31,7 +40,7 @@ export function useOnChainVerification(proofData?: ProofData) {
 
   useEffect(() => {
     if (!isConnected) {
-      connectors.map(c => c.ready && connect({ connector: c }));
+      reconnect();
     }
   }, [isConnected]);
 

@@ -4,6 +4,7 @@ import React from 'react';
 import { useOnChainVerification } from '../hooks/useOnChainVerification.jsx';
 import { useProofGeneration } from '../hooks/useProofGeneration.jsx';
 import { useOffChainVerification } from '../hooks/useOffChainVerification.jsx';
+import { User } from './user.jsx';
 
 function Component() {
   const [input, setInput] = useState<{ x: string; y: string } | undefined>();
@@ -25,6 +26,7 @@ function Component() {
   return (
     <form className="container" onSubmit={submit}>
       <h1>Example starter</h1>
+      <User />
       <h2>This circuit checks that x and y are different (yey!)</h2>
       <p>Try it!</p>
       <input name="x" type="text" />

@@ -40,18 +40,12 @@ const config: HardhatUserConfig = {
   },
 };
 
-if (process.env.MUMBAI_ALCHEMY_KEY && config.networks) {
-  config.networks.mumbai = {
-    url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.MUMBAI_ALCHEMY_KEY}`,
-    accounts: [process.env.MUMBAI_DEPLOYER_PRIVATE_KEY as string],
+if (config.networks) {
+  config.networks.scrollSepolia = {
+    url: `https://sepolia-rpc.scroll.io/`,
+    accounts: [process.env.SEPOLIA_SCROLL_DEPLOYER_PRIVATE_KEY as string],
   };
 }
 
-if (process.env.SEPOLIA_ALCHEMY_KEY && config.networks) {
-  config.networks.sepolia = {
-    url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.SEPOLIA_ALCHEMY_KEY}`,
-    accounts: [process.env.SEPOLIA_DEPLOYER_PRIVATE_KEY as string],
-  };
-}
 
 export default config;

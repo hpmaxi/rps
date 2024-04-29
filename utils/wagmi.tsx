@@ -1,20 +1,17 @@
-import { createConfig, configureChains } from 'wagmi';
-import { localhost, polygonMumbai, sepolia } from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { createConfig, http } from 'wagmi';
+import { injected } from 'wagmi/connectors';
 import abi from './verifierAbi.json';
 import { chainId, verifier } from './addresses.json';
+import { hardhat, scrollSepolia } from 'viem/chains';
 
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [localhost, polygonMumbai, sepolia],
-  [publicProvider()],
-);
-
+const connector = injected({ target: 'rabby' });
 export const config = createConfig({
-  autoConnect: true,
-  connectors: [new MetaMaskConnector({ chains })],
-  publicClient,
-  webSocketPublicClient,
+  connectors: [connector],
+  chains: [scrollSepolia, hardhat],
+  transports: {
+    [scrollSepolia.id]: http('https://rpc.ankr.com/scroll_sepolia_testnet'),
+    [hardhat.id]: http('http://127.0.0.1:8545/'),
+  },
 });
 
 export const contractCallConfig = {

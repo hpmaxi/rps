@@ -4,7 +4,9 @@
   "type": "module",
   "description": "A template repository to get started with writing zero knowledge programs with Noir.",
   "scripts": {
-    "prep": "cd circuit && nargo codegen-verifier",
+    "prep_reveal": "cd circuits/rps_reveal_play && nargo build && nargo codegen-verifier --package rps_reveal_play",
+    "prep_valid": "cd circuits/rps_valid_play && nargo build && nargo codegen-verifier --package rps_valid_play",
+    "prep": "yarn prep_reveal && yarn prep_valid",
     "dev": "yarn prep && hardhat compile && yarn deploy && vite",
     "build": "hardhat compile && yarn deploy && vite build",
     "preview": "vite preview",

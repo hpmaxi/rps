@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import Component from './components/index';
+import Home from './components/index';
 import initNoirC from '@noir-lang/noirc_abi';
 import initACVM from '@noir-lang/acvm_js';
 import { WagmiProvider } from 'wagmi';
@@ -42,7 +42,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Providers>
     <InitWasm>
-      <Component />
+      <Home />
       <ToastContainer />
     </InitWasm>
   </Providers>,

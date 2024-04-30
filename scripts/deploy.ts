@@ -6,12 +6,16 @@ async function main() {
   const publicClient = await viem.getPublicClient();
 
   // Deploy the verifier contract
-  const verifier = await viem.deployContract('UltraVerifier');
+  const verifierValid = await viem.deployContract('contracts/circuits/rps_valid_play/contract/rps_valid_play/plonk_vk.sol:UltraVerifier');
+  const verifierReveal = await viem.deployContract('contracts/circuits/rps_reveal_play/contract/rps_reveal_play/plonk_vk.sol:UltraVerifier');
+  const rps = await viem.deployContract('contracts/RPS.sol:RPS', [verifierValid.address, verifierReveal.address]);
 
   // Create a config object
   const config = {
     chainId: publicClient.chain.id,
-    verifier: verifier.address,
+    verifierValid: verifierValid.address,
+    verifierReveal: verifierReveal.address,
+    rps: rps.address
   };
 
   // Print the config

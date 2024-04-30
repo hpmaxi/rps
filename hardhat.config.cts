@@ -28,6 +28,11 @@ const config: HardhatUserConfig = {
     version: '0.8.18',
     settings: {
       optimizer: { enabled: true, runs: 5000 },
+      outputSelection: {
+        '*': {
+          '*': ['abi', 'evm.bytecode'],
+        },
+      },
     },
   },
   networks: {
@@ -35,8 +40,9 @@ const config: HardhatUserConfig = {
       url: 'http://127.0.0.1:8545',
     },
   },
+  
   paths: {
-    sources: './circuit',
+    sources: './contracts',
   },
 };
 

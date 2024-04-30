@@ -6,34 +6,44 @@ import { useProofGeneration } from '../hooks/useProofGeneration.jsx';
 import { useOffChainVerification } from '../hooks/useOffChainVerification.jsx';
 import { User } from './user.jsx';
 
-function Component() {
-  const [input, setInput] = useState<{ x: string; y: string } | undefined>();
+type Hand = 'SCISSORS' | 'ROCK' | 'PAPER';
+const MapField: Record<Hand, number> = {
+  ROCK: 0,
+  PAPER: 1,
+  SCISSORS: 2,
+};
+
+function Home() {
+  const [hand, setHand] = useState<Hand | null>(null);
+  const [input, setInput] = useState<{ hand: number } | undefined>();
+
   const { noir, proofData } = useProofGeneration(input);
   useOffChainVerification(noir, proofData);
   useOnChainVerification(proofData);
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const elements = e.currentTarget.elements;
-    if (!elements) return;
+    if (!hand) return;
 
-    const x = elements.namedItem('x') as HTMLInputElement;
-    const y = elements.namedItem('y') as HTMLInputElement;
-
-    setInput({ x: x.value, y: y.value });
+    setInput({ hand: MapField[hand] });
   };
 
   return (
     <form className="container" onSubmit={submit}>
-      <h1>Example starter</h1>
+      <h1>Rock paper scissors</h1>
       <User />
-      <h2>This circuit checks that x and y are different (yey!)</h2>
-      <p>Try it!</p>
-      <input name="x" type="text" />
-      <input name="y" type="text" />
-      <button type="submit">Calculate proof</button>
+      <h2>Select your hand</h2>
+      <div>
+        <button onClick={() => setHand('ROCK')}>🪨</button>
+        <button onClick={() => setHand('PAPER')}>📄</button>
+        <button onClick={() => setHand('SCISSORS')}>✂️</button>
+      </div>
+
+      <button type="submit" disabled={!hand}>
+        Submit proof
+      </button>
     </form>
   );
 }
 
-export default Component;
+export default Home;
